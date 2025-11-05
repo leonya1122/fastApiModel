@@ -1,0 +1,50 @@
+{
+  "api": {
+    "title": "ModelScan API",
+    "version": "1.0.0",
+    "description": "API для сканирования моделей машинного обучения",
+    "host": "0.0.0.0",
+    "port": 8000,
+    "reload": true,
+    "workers": 1,
+    "cors_origins": ["*"],
+    "cors_allow_credentials": true,
+    "cors_allow_methods": ["*"],
+    "cors_allow_headers": ["*"]
+  },
+  "scanning": {
+    "allowed_extensions": [".pkl", ".pickle", ".joblib", ".h5", ".hdf5", ".pt", ".pth", ".onnx", ".pb"],
+    "max_file_size": 104857600,
+    "default_scan_pickle": true,
+    "default_scan_saved_model": true,
+    "default_scan_h5": true,
+    "default_scan_onnx": true,
+    "scan_timeout": 300
+  },
+  "paths": {
+    "upload_dir": "uploads",
+    "scan_results_dir": "results",
+    "logs_dir": "logs",
+    "config_dir": "config"
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_file_size": 10485760,
+    "backup_count": 5
+  },
+  "security": {
+    "enable_rate_limiting": true,
+    "max_requests_per_minute": 60,
+    "api_key_required": false,
+    "allowed_file_types": ["application/octet-stream", "application/json", "text/plain"]
+  },
+  "modelscan": {
+    "enable_pickle_scan": true,
+    "enable_saved_model_scan": true,
+    "enable_h5_scan": true,
+    "enable_onnx_scan": true,
+    "scan_depth": 10,
+    "max_file_size": 104857600
+  }
+}
