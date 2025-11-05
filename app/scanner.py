@@ -2,8 +2,8 @@ import asyncio
 import uuid
 from typing import Dict, List, Optional
 from modelscan.modelscan import ModelScan
-from app.models import SecurityIssue, SeverityLevel, ScanStatus, ScanResponse
-from app.config import config_manager
+from models import SecurityIssue, SeverityLevel, ScanStatus, ScanResponse
+from config import config_manager
 import json
 import os
 from datetime import datetime

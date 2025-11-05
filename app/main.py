@@ -8,9 +8,9 @@ from typing import List, Optional
 import logging
 from logging.config import dictConfig
 
-from app.models import ScanRequest, ScanResponse, ScanStatus
-from app.scanner import scanner
-from app.config import config_manager, settings
+from models import ScanRequest, ScanResponse, ScanStatus
+from scanner import scanner
+from config import config_manager, settings
 
 # Настройка логирования
 def setup_logging():
