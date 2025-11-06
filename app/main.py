@@ -1,16 +1,18 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Query, Depends
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import os
 import aiofiles
-from typing import List, Optional
+from datetime import datetime
 import logging
 from logging.config import dictConfig
-
+from modelscan._version import __version__
 from models import ScanRequest, ScanResponse, ScanStatus
 from scanner import scanner
-from config import config_manager, settings
+from config import config_manager, Settings
+
+settings = config_manager.get_config()
 
 # Настройка логирования
 def setup_logging():
@@ -141,7 +143,8 @@ async def scan_file(
         file_path=file_path,
         issues=[],
         scan_summary={},
-        timestamp=str(datetime.now())
+        timestamp=str(datetime.now()),
+        hrefStatus = f"http://{settings.api.host}:{settings.api.port}/scan/{scan_id}/status",
     )
 
 @app.get("/scan/{scan_id}/status")
@@ -158,7 +161,7 @@ async def get_scan_status(scan_id: str):
 async def get_scan_results(scan_id: str, settings: Settings = Depends(get_settings)):
     """Получение результатов сканирования"""
     result_file = os.path.join(settings.paths.scan_results_dir, f"{scan_id}.json")
-    
+    print(scan_id)
     if not os.path.exists(result_file):
         raise HTTPException(status_code=404, detail="Результаты сканирования не найдены")
     
@@ -174,7 +177,8 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": str(datetime.now()),
-        "active_scans": len(scanner.active_scans)
+        "active_scans": len(scanner.active_scans),
+        "ModelScan Version": __version__
     }
 
 if __name__ == "__main__":

@@ -124,4 +124,3 @@ class ConfigManager:
 
 # Глобальный экземпляр менеджера конфигураций
 config_manager = ConfigManager()
-settings = config_manager.get_config()

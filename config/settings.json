@@ -3,7 +3,7 @@
     "title": "ModelScan API",
     "version": "1.0.0",
     "description": "API для сканирования моделей машинного обучения",
-    "host": "0.0.0.0",
+    "host": "127.0.0.1",
     "port": 8000,
     "reload": true,
     "workers": 1,
@@ -14,7 +14,7 @@
   },
   "scanning": {
     "allowed_extensions": [".pkl", ".pickle", ".joblib", ".h5", ".hdf5", ".pt", ".pth", ".onnx", ".pb"],
-    "max_file_size": 104857600,
+    "max_file_size": 1073741824,
     "default_scan_pickle": true,
     "default_scan_saved_model": true,
     "default_scan_h5": true,

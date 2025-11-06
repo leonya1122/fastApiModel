@@ -1,5 +1,4 @@
 import asyncio
-import uuid
 from typing import Dict, List, Optional
 from modelscan.modelscan import ModelScan
 from models import SecurityIssue, SeverityLevel, ScanStatus, ScanResponse
@@ -128,14 +127,18 @@ class ModelScanner:
             f"{scan_id}.json"
         )
         
-        async with await asyncio.to_thread(open, result_file, 'w') as f:
-            json_str = json.dumps(
-                response.dict(), 
-                indent=2, 
-                ensure_ascii=False, 
-                default=str
-            )
-            await f.write(json_str)
+        # Исправленная версия - используем синхронную запись в отдельном потоке
+        def write_results():
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(
+                    response.dict(), 
+                    f, 
+                    indent=2, 
+                    ensure_ascii=False, 
+                    default=str
+                )
+        
+        await asyncio.get_event_loop().run_in_executor(None, write_results)
     
     def get_scan_status(self, scan_id: str) -> Optional[Dict]:
         """Возвращает статус сканирования"""
