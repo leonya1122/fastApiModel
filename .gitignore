@@ -11,7 +11,7 @@ __pycache__/
 build/
 logs/
 results/
-upload/
+uploads/
 develop-eggs/
 dist/
 downloads/
