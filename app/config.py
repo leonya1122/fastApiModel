@@ -43,21 +43,12 @@ class SecurityConfig(BaseModel):
     api_key_required: bool
     allowed_file_types: List[str]
 
-class ModelScanConfig(BaseModel):
-    enable_pickle_scan: bool
-    enable_saved_model_scan: bool
-    enable_h5_scan: bool
-    enable_onnx_scan: bool
-    scan_depth: int
-    max_file_size: int
-
 class Settings(BaseModel):
     api: APIConfig
     scanning: ScanningConfig
     paths: PathsConfig
     logging: LoggingConfig
     security: SecurityConfig
-    modelscan: ModelScanConfig
 
 class ConfigManager:
     """Менеджер конфигураций"""

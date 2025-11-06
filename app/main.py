@@ -41,16 +41,17 @@ async def root():
             "scan_directory": "POST /scan/directory", 
             "scan_status": "GET /scan/{scan_id}/status",
             "scan_results": "GET /scan/{scan_id}/results",
-            "config": "GET /config",
             "health": "GET /health"
         }
     }
 
-@app.get("/config")
+#возвращает конфигурацию
+'''@app.get("/config")
 async def get_configuration(settings: Settings = Depends(get_settings)):
     """Возвращает текущую конфигурацию"""
-    return JSONResponse(content=settings.dict())
+    return JSONResponse(content=settings.dict())'''
 
+#загрузка файла модели для сканирования
 @app.post("/scan/file", response_model=ScanResponse)
 async def scan_file(
     background_tasks: BackgroundTasks,
@@ -104,6 +105,7 @@ async def scan_file(
         hrefStatus = f"http://{settings.api.host}:{settings.api.port}/scan/{scan_id}/status",
     )
 
+#получить информацию о статусе сканирования
 @app.get("/scan/{scan_id}/status")
 async def get_scan_status(scan_id: str):
     """Получение статуса сканирования"""
@@ -114,6 +116,7 @@ async def get_scan_status(scan_id: str):
     
     return status
 
+#получить информацию о результатах сканирования
 @app.get("/scan/{scan_id}/results", response_model=ScanResponse)
 async def get_scan_results(scan_id: str, settings: Settings = Depends(get_settings)):
     """Получение результатов сканирования"""
@@ -128,6 +131,7 @@ async def get_scan_results(scan_id: str, settings: Settings = Depends(get_settin
         
     return JSONResponse(content=content)
 
+#как дела?
 @app.get("/health")
 async def health_check():
     """Проверка здоровья API"""

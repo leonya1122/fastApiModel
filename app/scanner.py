@@ -6,35 +6,24 @@ from config import config_manager
 import json
 import os
 from datetime import datetime
+from modelscan.settings import DEFAULT_SETTINGS
 
+"""Класс для сканирования моделей ML"""
 class ModelScanner:
-    """Класс для сканирования моделей ML с конфигурацией из JSON"""
-    
+
     def __init__(self):
-        self.scanner = self._initialize_scanner()
-        self.active_scans: Dict[str, Dict] = {}
         self.settings = config_manager.get_config()
+        
+        #для изменения настроек сканирования
+        #custom_settings = DEFAULT_SETTINGS.copy()
+        #custom_settings["scanners"] = ...
+
+        self.scanner = ModelScan()
+        self.active_scans: Dict[str, Dict] = {}
     
-    def _initialize_scanner(self) -> ModelScan:
-        """Инициализирует сканер с настройками из конфигурации"""
-        # ModelScan может принимать параметры инициализации
-        # В текущей версии может не поддерживать все параметры, но оставляем для будущего
-        scanner = ModelScan()
-        return scanner
-    
-    def _get_scan_settings(self) -> Dict:
-        """Возвращает настройки сканирования из конфигурации"""
-        return {
-            "pickle": self.settings.modelscan.enable_pickle_scan,
-            "saved_model": self.settings.modelscan.enable_saved_model_scan,
-            "h5": self.settings.modelscan.enable_h5_scan,
-            "onnx": self.settings.modelscan.enable_onnx_scan,
-            "scan_depth": self.settings.modelscan.scan_depth,
-            "max_file_size": self.settings.modelscan.max_file_size
-        }
-    
+    """Конвертирует severity из ModelScan в наш формат"""
     def _convert_severity(self, severity: str) -> SeverityLevel:
-        """Конвертирует severity из ModelScan в наш формат"""
+        
         severity_map = {
             "low": SeverityLevel.LOW,
             "medium": SeverityLevel.MEDIUM,
@@ -43,8 +32,9 @@ class ModelScanner:
         }
         return severity_map.get(severity.lower(), SeverityLevel.MEDIUM)
     
+    """Парсит результаты сканирования в список проблем"""
     def _parse_issues(self, scan_results: Dict) -> List[SecurityIssue]:
-        """Парсит результаты сканирования в список проблем"""
+        
         issues = []
         
         if not scan_results or "issues" not in scan_results:
@@ -62,15 +52,14 @@ class ModelScanner:
         
         return issues
     
+    """Асинхронно сканирует файл"""
     async def scan_file(self, file_path: str, scan_id: str) -> ScanResponse:
-        """Асинхронно сканирует файл"""
         try:
             # Обновляем статус сканирования
             self.active_scans[scan_id] = {
                 "status": ScanStatus.SCANNING,
                 "file_path": file_path,
                 "start_time": datetime.now(),
-                "settings": self._get_scan_settings()
             }
             
             # Запускаем сканирование в отдельном потоке с таймаутом
@@ -92,8 +81,7 @@ class ModelScanner:
                 scan_summary={
                     "total_issues": len(issues),
                     "high_severity_issues": len([i for i in issues if i.severity in [SeverityLevel.HIGH, SeverityLevel.CRITICAL]]),
-                    "scan_time": str(datetime.now()),
-                    "scan_settings": self._get_scan_settings()
+                    "scan_time": str(datetime.now())
                 },
                 timestamp=str(datetime.now())
             )
@@ -120,14 +108,12 @@ class ModelScanner:
             self.active_scans[scan_id]["error"] = str(e)
             raise e
     
+    """Сохраняет результаты сканирования"""
     async def _save_results(self, scan_id: str, response: ScanResponse):
-        """Сохраняет результаты сканирования"""
         result_file = os.path.join(
             self.settings.paths.scan_results_dir, 
             f"{scan_id}.json"
         )
-        
-        # Исправленная версия - используем синхронную запись в отдельном потоке
         def write_results():
             with open(result_file, 'w', encoding='utf-8') as f:
                 json.dump(
@@ -140,8 +126,8 @@ class ModelScanner:
         
         await asyncio.get_event_loop().run_in_executor(None, write_results)
     
+    """Возвращает статус сканирования"""
     def get_scan_status(self, scan_id: str) -> Optional[Dict]:
-        """Возвращает статус сканирования"""
         return self.active_scans.get(scan_id)
 
 # Глобальный экземпляр сканера
