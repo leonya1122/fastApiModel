@@ -1,50 +1,160 @@
 {
+  "_comment": "Конфигурационный файл ModelScan API",
+  "_description": "Все настройки API для сканирования моделей машинного обучения",
   "api": {
+
+    "_description": "Настройки FastAPI приложения",
+
     "title": "ModelScan API",
+    "_title_description": "Название API приложения",
+
     "version": "1.0.0",
+    "_version_description": "Версия API",
+
     "description": "API для сканирования моделей машинного обучения",
+    "_description_description": "Описание API приложения",
+
     "host": "127.0.0.1",
+    "_host_description": "Хост для запуска сервера (0.0.0.0 для доступа снаружи)",
+
     "port": 8000,
+    "_port_description": "Порт для запуска сервера",
+
     "reload": true,
+    "_reload_description": "Автоматическая перезагрузка при изменении кода (только для разработки)",
+
     "workers": 1,
-    "cors_origins": ["*"],
+    "_workers_description": "Количество воркеров для обработки запросов",
+
+    "cors_origins": [
+      "*"
+    ],
+    "_cors_origins_description": "Разрешенные домены для CORS (['*'] для всех)",
     "cors_allow_credentials": true,
-    "cors_allow_methods": ["*"],
-    "cors_allow_headers": ["*"]
+    "_cors_allow_credentials_description": "Разрешить передачу учетных данных",
+    "cors_allow_methods": [
+      "*"
+    ],
+    "_cors_allow_methods_description": "Разрешенные HTTP методы",
+    "cors_allow_headers": [
+      "*"
+    ],
+    "_cors_allow_headers_description": "Разрешенные HTTP заголовки"
   },
+
   "scanning": {
-    "allowed_extensions": [".pkl", ".pickle", ".joblib", ".h5", ".hdf5", ".pt", ".pth", ".onnx", ".pb"],
-    "max_file_size": 1073741824,
+    "_description": "Настройки сканирования файлов",
+    
+    "allowed_extensions": [
+      ".pkl",
+      ".pickle",
+      ".joblib",
+      ".h5",
+      ".hdf5",
+      ".pt",
+      ".pth",
+      ".onnx",
+      ".pb"
+    ],
+    "_allowed_extensions_description": "Разрешенные расширения файлов для сканирования",
+
+    "max_file_size": 104857600,
+    "_max_file_size_description": "Максимальный размер файла в байтах (100 МБ)",
+
     "default_scan_pickle": true,
+    "_default_scan_pickle_description": "Сканировать Pickle файлы по умолчанию",
+
     "default_scan_saved_model": true,
+    "_default_scan_saved_model_description": "Сканировать TensorFlow SavedModel по умолчанию",
+
     "default_scan_h5": true,
+    "_default_scan_h5_description": "Сканировать H5 файлы по умолчанию",
+
     "default_scan_onnx": true,
-    "scan_timeout": 300
+    "_default_scan_onnx_description": "Сканировать ONNX файлы по умолчанию",
+
+    "scan_timeout": 300,
+    "_scan_timeout_description": "Таймаут сканирования в секундах"
+
   },
+
   "paths": {
+    "_description": "Настройки путей к директориям",
+
     "upload_dir": "uploads",
+    "_upload_dir_description": "Директория для загруженных файлов",
+
     "scan_results_dir": "results",
+    "_scan_results_dir_description": "Директория для результатов сканирования",
+
     "logs_dir": "logs",
-    "config_dir": "config"
+    "_logs_dir_description": "Директория для лог-файлов",
+
+    "config_dir": "config",
+    "_config_dir_description": "Директория с конфигурационными файлами"
+
   },
+
   "logging": {
+    "_description": "Настройки логирования",
     "level": "INFO",
+    "_level_description": "Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+
     "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "_format_description": "Формат лог-сообщений",
+
     "max_file_size": 10485760,
-    "backup_count": 5
+    "_max_file_size_description": "Максимальный размер лог-файла в байтах (10 МБ)",
+
+    "backup_count": 5,
+    "_backup_count_description": "Количество бэкап лог-файлов"
   },
+
   "security": {
+    "_description": "Настройки безопасности",
     "enable_rate_limiting": true,
+    "_enable_rate_limiting_description": "Включить ограничение частоты запросов",
+
     "max_requests_per_minute": 60,
+    "_max_requests_per_minute_description": "Максимальное количество запросов в минуту на IP",
+
     "api_key_required": false,
-    "allowed_file_types": ["application/octet-stream", "application/json", "text/plain"]
+    "_api_key_required_description": "Требовать API ключ для доступа к endpoints",
+
+    "allowed_file_types": [
+      "application/octet-stream",
+      "application/json",
+      "text/plain"
+    ],
+    "_allowed_file_types_description": "Разрешенные MIME типы файлов"
   },
+
   "modelscan": {
+    "_description": "Настройки интеграции с ModelScan",
+
     "enable_pickle_scan": true,
+    "_enable_pickle_scan_description": "Включить сканирование Pickle файлов",
+
     "enable_saved_model_scan": true,
+    "_enable_saved_model_scan_description": "Включить сканирование TensorFlow SavedModel",
+
     "enable_h5_scan": true,
+    "_enable_h5_scan_description": "Включить сканирование H5 файлов (Keras)",
+
     "enable_onnx_scan": true,
+    "_enable_onnx_scan_description": "Включить сканирование ONNX файлов",
+
     "scan_depth": 10,
-    "max_file_size": 104857600
-  }
+    "_scan_depth_description": "Глубина сканирования вложенных объектов",
+
+    "max_file_size": 104857600,
+    "_max_file_size_description": "Максимальный размер файла для ModelScan в байтах"
+    
+  },
+  "_notes": [
+    "Все пути к директориям относительные к корню приложения",
+    "Размеры файлов указываются в байтах",
+    "Для применения изменений требуется перезагрузка приложения",
+    "Настройки безопасности рекомендуются для продакшн среды"
+  ]
 }
