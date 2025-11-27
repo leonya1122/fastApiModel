@@ -73,7 +73,7 @@ async def scan_file(
     # Генерируем ID сканирования
     scan_id = str(uuid.uuid4())
     
-    # Сохраняем файл
+    # Сохраняем файл модели
     file_path = os.path.join(settings.paths.upload_dir, f"{scan_id}_{file.filename}")
     
     async with aiofiles.open(file_path, 'wb') as f:
@@ -121,7 +121,6 @@ async def get_scan_status(scan_id: str):
 async def get_scan_results(scan_id: str, settings: Settings = Depends(get_settings)):
     """Получение результатов сканирования"""
     result_file = os.path.join(settings.paths.scan_results_dir, f"{scan_id}.json")
-    print(scan_id)
     if not os.path.exists(result_file):
         raise HTTPException(status_code=404, detail="Результаты сканирования не найдены")
     

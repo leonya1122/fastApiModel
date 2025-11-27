@@ -79,7 +79,9 @@ class ModelScanner(ModelScan):
                     "high_severity_issues": len([i for i in issues if i.severity in [SeverityLevel.HIGH, SeverityLevel.CRITICAL]]),
                     "scan_time": str(datetime.now())
                 },
-                timestamp=str(datetime.now())
+                timestamp=str(datetime.now()),
+                hrefStatus=f"http://{self.project_settings.api.host}:{self.project_settings.api.port}/scan/{scan_id}/status",
+                errors=scan_results['errors']
             )
 
             # Сохраняем результаты
