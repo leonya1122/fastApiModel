@@ -7,7 +7,7 @@ scanner = ModelScan()
 
 async def scan_file():
     loop = asyncio.get_event_loop()
-    scan_results = await asyncio.wait_for(loop.run_in_executor(None, scanner.scan, "mod.pb"), timeout=300)
+    scan_results = await asyncio.wait_for(loop.run_in_executor(None, scanner.scan, "123.h5"), timeout=300)
     print(scan_results)
 
 

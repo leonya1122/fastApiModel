@@ -36,6 +36,7 @@ class ScanResponse(BaseModel):
     scan_summary: Dict[str, Any] = Field(..., description="Сводка сканирования")
     timestamp: str = Field(..., description="Время сканирования")
     hrefStatus: str = Field(None, description = "Ссылка на статус сканирования")
+    errors: str = Field(None, description = "Ошибки")
 
 class ScanSummary(BaseModel):
     total_files: int = Field(..., description="Всего файлов")
